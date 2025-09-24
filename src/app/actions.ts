@@ -1,7 +1,6 @@
 'use server';
 import { supabaseServer } from '@/lib/supabase/server';
 import { makeDeck } from '@/lib/iota/deck';
-import { v4 as uuidv4 } from 'uuid';
 
 
 export async function createRoom(name: string){

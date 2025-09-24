@@ -1,9 +1,51 @@
 import { Card, Grid, Line, Pos, TurnPlacement, TurnScore, key } from './types';
-return allSame || allDifferent;
-};
 
+function isValidIotaLine(cards: Card[]): boolean {
+  if (cards.length < 2 || cards.length > 4) return false;
 
-return feasible(colors) && feasible(shapes) && feasible(nums);
+  function feasible<T>(values: T[]): boolean {
+    const unique = [...new Set(values)];
+    const allSame = unique.length === 1;
+    const allDifferent = unique.length === values.length;
+    return allSame || allDifferent;
+  }
+
+  const colors = cards.map(c => c.kind === 'wild' ? 'wild' : c.color);
+  const shapes = cards.map(c => c.kind === 'wild' ? 'wild' : c.shape);
+  const nums = cards.map(c => c.kind === 'wild' ? 0 : c.num);
+
+  return feasible(colors) && feasible(shapes) && feasible(nums);
+}
+
+function isAdjacentToGrid(grid: Grid, pos: Pos): boolean {
+  const adjacent = [
+    { r: pos.r - 1, c: pos.c },
+    { r: pos.r + 1, c: pos.c },
+    { r: pos.r, c: pos.c - 1 },
+    { r: pos.r, c: pos.c + 1 }
+  ];
+  return adjacent.some(p => grid.has(key(p)));
+}
+
+function getContiguousLine(grid: Grid, start: Pos, dir: 'row' | 'col'): Line {
+  const line: Line = [start];
+  const delta = dir === 'row' ? { r: 0, c: 1 } : { r: 1, c: 0 };
+
+  // Expand forward
+  let current = { r: start.r + delta.r, c: start.c + delta.c };
+  while (grid.has(key(current))) {
+    line.push(current);
+    current = { r: current.r + delta.r, c: current.c + delta.c };
+  }
+
+  // Expand backward
+  current = { r: start.r - delta.r, c: start.c - delta.c };
+  while (grid.has(key(current))) {
+    line.unshift(current);
+    current = { r: current.r - delta.r, c: current.c - delta.c };
+  }
+
+  return line;
 }
 
 

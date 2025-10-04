@@ -24,6 +24,11 @@ return (
 <main>
 <Header title="iota online"/>
 <div className="max-w-xl mx-auto p-4 grid gap-6">
+<Link href="/local" className="grid gap-2 p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded shadow hover:from-blue-600 hover:to-blue-700 transition-colors">
+<h2 className="text-lg font-semibold">🎮 Play Local Game</h2>
+<p className="text-sm text-blue-100">2 players on one device (no account needed)</p>
+</Link>
+
 <form action={newRoom} className="grid gap-2 p-4 bg-white rounded shadow">
 <h2 className="text-lg font-semibold">Create room</h2>
 <input name="name" placeholder="Room name" className="border p-2 rounded"/>

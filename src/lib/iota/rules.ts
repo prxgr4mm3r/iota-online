@@ -88,6 +88,49 @@ return { ok:true };
 }
 
 
+export function getValidPositions(grid: Grid, card: Card): Set<string> {
+  const validPositions = new Set<string>();
+
+  // If grid is empty, only center is valid
+  if (grid.size === 0) {
+    validPositions.add('5:5');
+    return validPositions;
+  }
+
+  // Find all empty cells adjacent to existing cards
+  const adjacentCells = new Set<string>();
+
+  for (const [cellKey] of grid) {
+    const [r, c] = cellKey.split(':').map(Number);
+    const neighbors = [
+      { r: r - 1, c },
+      { r: r + 1, c },
+      { r, c: c - 1 },
+      { r, c: c + 1 }
+    ];
+
+    for (const pos of neighbors) {
+      const k = key(pos);
+      if (!grid.has(k)) {
+        adjacentCells.add(k);
+      }
+    }
+  }
+
+  // Test each adjacent cell to see if card can be placed there
+  for (const cellKey of adjacentCells) {
+    const [r, c] = cellKey.split(':').map(Number);
+    const testPlacement: TurnPlacement = [{ card, pos: { r, c } }];
+    const validation = validateTurn(grid, testPlacement);
+
+    if (validation.ok) {
+      validPositions.add(cellKey);
+    }
+  }
+
+  return validPositions;
+}
+
 export function scoreTurn(grid: Grid, placements: TurnPlacement): TurnScore {
 const tmp: Grid = new Map(grid);
 for (const pl of placements) tmp.set(key(pl.pos), pl.card);

@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-*{box-sizing:border-box}
-body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial}
-button{cursor:pointer}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family:
+        ui-sans-serif,
+        system-ui,
+        Segoe UI,
+        Roboto,
+        Helvetica,
+        Arial;
+}
+button {
+    cursor: pointer;
+}

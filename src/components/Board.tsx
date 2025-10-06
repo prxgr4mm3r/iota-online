@@ -10,24 +10,30 @@ export default function Board({
     validPositions = new Set(),
     replaceWildMode = false,
     selectedWildPos = null,
+    bounds = { minRow: -5, maxRow: 5, minCol: -5, maxCol: 5 },
 }: {
     grid: Map<string, Card>;
     onDrop: (pos: Pos) => void;
     validPositions?: Set<string>;
     replaceWildMode?: boolean;
     selectedWildPos?: Pos | null;
+    bounds?: { minRow: number; maxRow: number; minCol: number; maxCol: number };
 }) {
-    const size = 11; // 11x11 MVP
+    const rows = bounds.maxRow - bounds.minRow + 1;
+    const cols = bounds.maxCol - bounds.minCol + 1;
+
     return (
         <div
             className="grid place-items-center"
             style={{
-                gridTemplateColumns: `repeat(${size}, minmax(120px, 7.5vw))`,
+                gridTemplateColumns: `repeat(${cols}, minmax(120px, 7.5vw))`,
                 gap: '8px'
             }}
         >
-            {Array.from({ length: size }).map((_, r) =>
-                Array.from({ length: size }).map((_, c) => {
+            {Array.from({ length: rows }).map((_, ri) => {
+                const r = bounds.minRow + ri;
+                return Array.from({ length: cols }).map((_, ci) => {
+                    const c = bounds.minCol + ci;
                     const k = `${r}:${c}`;
                     const card = grid.get(k);
                     const isValid = validPositions.has(k);
@@ -72,8 +78,8 @@ export default function Board({
                             ) : null}
                         </div>
                     );
-                })
-            )}
+                });
+            })}
         </div>
     );
 }
